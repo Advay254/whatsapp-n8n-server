@@ -17,6 +17,15 @@ const ZodEnvSchema = z.object({
   PORT: z.string().min(1).max(5).default("9999"),
   API_KEY: z.string(),
   BROADCAST_DELAY_MS: z.string().min(1).max(5).default("1500"),
+  /**
+   * Optional. PostgreSQL connection string for external session persistence.
+   * When set, WhatsApp sessions survive server restarts and redeployments.
+   * When omitted, sessions are stored locally (default LocalAuth behaviour).
+   *
+   * Supported providers: Supabase, Aiven, Neon, Railway, self-hosted PostgreSQL.
+   * Example: postgresql://user:password@host:5432/database
+   */
+  POSTGRES_URL: z.string().url().optional(),
 });
 
 const { data: env, error } = ZodEnvSchema.safeParse(process.env);
